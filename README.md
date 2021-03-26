@@ -26,5 +26,6 @@ To-Do list
   -fix some bugs
   
 Getting Started
-  -git clone 
+  -git clone https://github.com/poraltic/0947JavaReact-project-1--Reimbursement-app-Estevan-Mora.git
+  -make sure to have a tomcat server properly configured
   
