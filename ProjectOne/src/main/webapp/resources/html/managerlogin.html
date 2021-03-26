@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Home</title>
+</head>
+<body>
+<h1>Successfully logged in</h1><br/>
+	<label for="status">Choose how to sort reimbursements: </label>
+	<select name="reimbsorter" id="reimbChoice">
+		<option value="0">ALL</option>
+		<option value="1">PENDING</option>
+		<option value="2">DENIED</option>
+		<option value="3">APPROVED</option>
+	</select>
+	<button id="b1">Sort</button><br />
+	<form method="POST" action="/ProjectOne/reimb.rs">
+	<button id="b2">Submit New Reimbursement</button>
+	</form> <br/>
+	<form method="POST" action="/ProjectOne/approveStatus.rs">
+		<p>Put in approval status and id</p>
+		<input placeholder="Approval status" name="status"/>
+		<input type="number" name="reimbid"/>
+		<input type="submit" value="submit"/>
+	</form>
+	<form method="POST" action="/ProjectOne/logout.rs">
+	</form>
+	<div id="container"></div>
+	
+	
+	<script type="text/javascript">
+	window.onload = function(){
+		document.getElementById("b1").addEventListener("click", sortReimb);
+	}
+
+	function sortReimb(){
+		let xhr = new XMLHttpRequest();
+		
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status==200){
+				let sJSON = JSON.parse(xhr.responseText);
+				console.log(sJSON);
+				DOMManipulator(sJSON);
+			}
+		}
+		xhr.open("POST", "http://localhost:8080/ProjectOne/displaytickets.json");
+		xhr.send();
+	}
+
+	function DOMManipulator(sortJSON){
+
+		html = "<table><tr>";
+		
+		for(var i = 0; i < sortJSON.length;i++){
+			html += `<td>${sortJSON[i].reimbId}</td>`
+			html += `<td>${sortJSON[i].amount}</td>`
+			html += `<td>${sortJSON[i].author}</td>`
+			html += `<td>${sortJSON[i].description}</td>`
+			html += `<td>${sortJSON[i].reimbType}</td>`
+			html += `<td>${sortJSON[i].resolved}</td>`
+			html += `<td>${sortJSON[i].resolver}</td>`
+			html += `<td>${sortJSON[i].statusType}</td>`
+			html += `<td>${sortJSON[i].timestamp.month} ${sortJSON[i].timestamp.dayOfMonth} ${sortJSON[i].timestamp.year}</td>`
+			html += '</tr><tr>'
+		}
+		html += '</tr></table>'
+		document.getElementById('container').innerHTML = html;
+		
+	}
+	</script>
+
+</body>
+</html>
